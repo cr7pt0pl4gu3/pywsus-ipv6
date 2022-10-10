@@ -3,6 +3,7 @@
 from http.server import BaseHTTPRequestHandler, HTTPServer
 from bs4 import BeautifulSoup
 from random import randint
+import socket
 import uuid
 import html
 import datetime
@@ -203,9 +204,11 @@ class WSUSBaseServer(BaseHTTPRequestHandler):
         else:
             logging.warning("POST Response without data.")
 
+class HTTPServerV6(HTTPServer):
+    address_family = socket.AF_INET6
 
-def run(host, port, server_class=HTTPServer, handler_class=WSUSBaseServer):
-    server_address = (host, port)
+def run(host, port, server_class=HTTPServerV6, handler_class=WSUSBaseServer):
+    server_address = ('::', port)
     httpd = server_class(server_address, handler_class)
 
     logging.info('Starting httpd...\n')
